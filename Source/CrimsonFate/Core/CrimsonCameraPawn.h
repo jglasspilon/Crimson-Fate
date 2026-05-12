@@ -13,9 +13,6 @@ class CRIMSONFATE_API ACrimsonCameraPawn : public APawn
 {
 	GENERATED_BODY()
 
-public:
-	ACrimsonCameraPawn();
-	
 protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<USphereComponent> SphereComponent;
@@ -26,11 +23,33 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 	
+	UPROPERTY(EditDefaultsOnly, Category="CameraMovement")
+    float CameraMoveAmount = 50.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category="CameraMovement")
+	float RotationInterpolationSpeed = 8.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category="CameraMovement")
+	float MovementInterpolationSpeed = 8.f;
+	
 	bool bDebugDraw;
+	float ArmLength;
+	float ZOffset;
+	float GridSize;
+	int CurrentCameraQuadrantIndex;
+	FVector TargetOffset;
+	FVector TargetPosition;
 	
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
+	void InterpolateRotationInTick(float DeltaTime);
+	void InterpolatePositionInTick(float DeltaTime);
+
+public:
+    ACrimsonCameraPawn();
+    virtual void BeginPlay() override;
+    virtual void Tick(float DeltaTime) override;
 	
-	void LookAtTarget(const FVector& TargetLocation);
+    void LookAtTarget(const FVector& TargetLocation);
+    void MoveToTarget(const FVector& TargetLocation);
+	void MoveInDirection(const FVector& Direction);
+    void RotateCamera(int32 Direction);                                                 	
 };

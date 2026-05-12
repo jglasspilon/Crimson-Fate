@@ -1,10 +1,42 @@
 ﻿#include "CrimsonPlayerController.h"
-#include "CrimsonFate/CrimsonFate.h"
+#include "CrimsonCameraPawn.h"
+#include "CrimsonDeveloperSettings.h"
+#include "EnhancedInputComponent.h"
+#include "InputActionValue.h"
 
-void ACrimsonPlayerController::BeginPlay()
+void ACrimsonPlayerController::OnPossess(APawn* InPawn)
 {
-	Super::BeginPlay();
-	
-	FString Name = GetClass()->GetDisplayNameText().ToString();
-	UE_LOG(LogGame, Log, TEXT("Loaded %s"), *Name);
+	Super::OnPossess(InPawn);
+	CachedCameraPawn = Cast<ACrimsonCameraPawn>(InPawn);
 }
+
+void ACrimsonPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	
+	UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(InputComponent);
+	EnhancedInput->BindAction(Input_Rotate, ETriggerEvent::Started, this, &ThisClass::OnRotate);
+	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ThisClass::OnMove);
+}
+
+void ACrimsonPlayerController::OnRotate(const FInputActionValue& Value)
+{
+	float Direction = Value.Get<float>();
+	
+	if (CachedCameraPawn)
+	{
+		CachedCameraPawn->RotateCamera(Direction);
+	}
+}
+
+void ACrimsonPlayerController::OnMove(const FInputActionValue& Value)
+{
+	FVector Direction = Value.Get<FVector>();
+	
+	if (CachedCameraPawn)
+	{
+		CachedCameraPawn->MoveInDirection(Direction);
+	}
+}
+
+
