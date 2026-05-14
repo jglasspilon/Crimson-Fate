@@ -158,3 +158,16 @@ void ACrimsonCameraPawn::InterpolatePositionInTick(float const DeltaTime)
 	}
 }
 
+void ACrimsonCameraPawn::SnapToGrid()
+{
+	float GridX = FMath::GridSnap(TargetPosition.X, GridSize);
+	float GridY = FMath::GridSnap(TargetPosition.Y, GridSize);
+	
+	TargetPosition = FVector(GridX, GridY, TargetPosition.Z);
+	
+	if (bDebugDraw)
+	{
+		DrawDebugBox(GetWorld(), TargetPosition, FVector(GridSize/2.f,GridSize/2.f,20.f), GetActorRotation().Quaternion(), FColor::Green, false, 3.f);
+	}
+}
+

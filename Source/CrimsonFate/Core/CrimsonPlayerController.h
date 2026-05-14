@@ -28,4 +28,5 @@ protected:
 	virtual void SetupInputComponent() override;
 	void OnRotate(const FInputActionValue& Value);
 	void OnMove(const FInputActionValue& Value);
+	void OnMoveEnd(const FInputActionValue& Value);
 };

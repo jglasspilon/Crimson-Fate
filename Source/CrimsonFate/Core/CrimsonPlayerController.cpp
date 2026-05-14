@@ -17,6 +17,7 @@ void ACrimsonPlayerController::SetupInputComponent()
 	UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(InputComponent);
 	EnhancedInput->BindAction(Input_Rotate, ETriggerEvent::Started, this, &ThisClass::OnRotate);
 	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ThisClass::OnMove);
+	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Completed, this, &ThisClass::OnMoveEnd);
 }
 
 void ACrimsonPlayerController::OnRotate(const FInputActionValue& Value)
@@ -36,6 +37,14 @@ void ACrimsonPlayerController::OnMove(const FInputActionValue& Value)
 	if (CachedCameraPawn)
 	{
 		CachedCameraPawn->MoveInDirection(Direction);
+	}
+}
+
+void ACrimsonPlayerController::OnMoveEnd(const FInputActionValue& Value)
+{
+	if (CachedCameraPawn)
+	{
+		CachedCameraPawn->SnapToGrid();
 	}
 }
 

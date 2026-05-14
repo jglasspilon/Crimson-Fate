@@ -51,5 +51,6 @@ public:
     void LookAtTarget(const FVector& TargetLocation);
     void MoveToTarget(const FVector& TargetLocation);
 	void MoveInDirection(const FVector& Direction);
-    void RotateCamera(int32 Direction);                                                 	
+    void RotateCamera(int32 Direction);    
+	void SnapToGrid();                                             	
 };
