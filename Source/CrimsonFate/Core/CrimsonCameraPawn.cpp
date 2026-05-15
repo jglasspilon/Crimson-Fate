@@ -8,7 +8,6 @@
 
 TAutoConsoleVariable<bool> CVarCameraDebugDrawing(TEXT("game.camera.debugDraw"), false, TEXT("Enable/Disable debug draw for Camera positioning. 0 = off, 1 = on"), ECVF_Cheat);
 
-
 ACrimsonCameraPawn::ACrimsonCameraPawn()
 {
 	const UCrimsonDeveloperSettings* DevSettings = GetDefault<UCrimsonDeveloperSettings>();
@@ -36,6 +35,7 @@ void ACrimsonCameraPawn::BeginPlay()
 void ACrimsonCameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	TRACE_CPUPROFILER_EVENT_SCOPE(CameraPawn::Tick);
 	bDebugDraw = CVarCameraDebugDrawing.GetValueOnGameThread();
 	
 	LookAtTarget(SphereComponent->GetComponentLocation());
@@ -63,6 +63,7 @@ void ACrimsonCameraPawn::LookAtTarget(const FVector& TargetLocation)
 
 void ACrimsonCameraPawn::MoveToTarget(const FVector& TargetLocation)
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(CameraPawn::MoveToTarget);
 	FVector TraceStart = FVector(TargetLocation.X, TargetLocation.Y, TargetLocation.Z + 500.f);
 	FHitResult Hit;
 	FCollisionQueryParams Params;
